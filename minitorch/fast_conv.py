@@ -91,10 +91,10 @@ def _tensor_conv1d(
     s2 = weight_strides
 
     # TODO: Implement for Task 4.1.
-    for b in prange(batch_):
+    for b in prange(batch_): 
         for o in range(out_channels):
             for t in range(out_width):
-                out_index = b * out_strides[0] + o * out_strides[1] + t * out_strides[2] # Compute the output index
+                out_index = b * out_strides[0] + o * out_strides[1] + t * out_strides[2] # Output index
                 val = 0.0
                 # Accumulate over all input channels and kernel positions
                 for ic in range(in_channels):
