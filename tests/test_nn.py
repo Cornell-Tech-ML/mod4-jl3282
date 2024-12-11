@@ -32,14 +32,24 @@ def test_avg(t: Tensor) -> None:
 @given(tensors(shape=(2, 3, 4)))
 def test_max(t: Tensor) -> None:
     # TODO: Implement for Task 4.4.
-    result_last_dim = minitorch.max(t, 2)
-    result_mid_dim = minitorch.max(t, 1)
-    result_first_dim = minitorch.max(t, 0)
+    for dim in range(3):
+        reduced = minitorch.max(t, dim)
 
-    assert_close(result_last_dim[0, 0, 0], max(t[0, 0, j] for j in range(4)))
-    assert_close(result_mid_dim[0, 0, 0], max(t[0, k, 0] for k in range(3)))
-    assert_close(result_first_dim[0, 0, 0], max(t[m, 0, 0] for m in range(2)))
-
+        if dim == 0: # Reduce along the batch dimension
+            for channel in range(3):
+                for width in range(4):
+                    expected = max(t[batch, channel, width] for batch in range(2))
+                    assert_close(reduced[0, channel, width], expected)
+        elif dim == 1: # Reduce along the channel dimension
+            for batch in range(2):
+                for width in range(4):
+                    expected = max(t[batch, channel, width] for channel in range(3))
+                    assert_close(reduced[batch, 0, width], expected)
+        elif dim == 2: # Reduce along the width dimension
+            for batch in range(2):
+                for channel in range(3):
+                    expected = max(t[batch, channel, width] for width in range(4))
+                    assert_close(reduced[batch, channel, 0], expected)
 
 
 @pytest.mark.task4_4

@@ -568,12 +568,12 @@ def _tensor_matrix_multiply(
     a_batch_stride = a_strides[0] if a_shape[0] > 1 else 0
     b_batch_stride = b_strides[0] if b_shape[0] > 1 else 0
     # Batch dimension - fixed
-    batch = cuda.blockIdx.z
 
     # Shared memory allocation for matrix a and b
     BLOCK_DIM = 32
     a_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
     b_shared = cuda.shared.array((BLOCK_DIM, BLOCK_DIM), numba.float64)
+    batch = cuda.blockIdx.z
 
     # Compute global and local thread indices
     # The final position c[i, j]; global position

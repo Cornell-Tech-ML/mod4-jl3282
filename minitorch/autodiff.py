@@ -112,8 +112,8 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
     """
     # TODO: Implement for Task 1.4.
     queue = topological_sort(variable)
-    derivatives = {}
-    derivatives[variable.unique_id] = deriv
+    derivatives = {variable.unique_id: deriv}
+
     for var in queue:
         deriv = derivatives[var.unique_id]
         if var.is_leaf():
@@ -123,7 +123,7 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
                 if v.is_constant():
                     continue
                 derivatives.setdefault(v.unique_id, 0.0)
-                derivatives[v.unique_id] = derivatives[v.unique_id] + d
+                derivatives[v.unique_id] += d
 
 
 @dataclass

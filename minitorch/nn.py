@@ -43,9 +43,9 @@ def tile(input: Tensor, kernel: Tuple[int, int]) -> Tuple[Tensor, int, int]:
     reshaped = input.contiguous().view(batch, channel, new_height, kh, new_width, kw)
     reshaped = reshaped.permute(0, 1, 2, 4, 3, 5).contiguous()
     # Flatten the (kh, kw) into a single dimension
-    tiled = reshaped.view(batch, channel, new_height, new_width, kh * kw)
+    reshaped = reshaped.view(batch, channel, new_height, new_width, kh * kw)
 
-    return tiled, new_height, new_width
+    return reshaped, new_height, new_width
 
 # TODO: Implement for Task 4.3.
 
@@ -83,7 +83,7 @@ def argmax(input: Tensor, dim: int) -> Tensor:
 
     """
     max = max_reduce(input, dim)
-    return max == input
+    return input == max
 
 class Max(Function):
     @staticmethod
@@ -102,7 +102,7 @@ class Max(Function):
 
         """
         max = max_reduce(input, int(dim.item()))
-        ctx.save_for_backward(input, max)
+        ctx.save_for_backward(input, int(dim.item()))
         return max
     
     @staticmethod
@@ -120,8 +120,8 @@ class Max(Function):
             Gradient of the loss with respect to the dimension (always 0.0)
 
         """
-        input, max = ctx.saved_values
-        return ((input == max) * grad_output), 0.0
+        input, dim = ctx.saved_values
+        return (argmax(input, dim) * grad_output), 0.0
 
 def max(input: Tensor, dim: int) -> Tensor:
     """Compute the max along a dimension
@@ -168,7 +168,11 @@ def logsoftmax(input: Tensor, dim: int) -> Tensor:
         The logsoftmax tensor
 
     """
-    return softmax(input, dim).log()
+    x_max = max(input, dim)
+    exp = (input - x_max).exp()
+    sum = exp.sum(dim = dim)
+    out = input - sum.log() - x_max
+    return out
 
 def maxpool2d(input: Tensor, kernel: Tuple[int, int]) -> Tensor:
     """Apply max pooling to the input tensor.
@@ -195,7 +199,7 @@ def dropout(input: Tensor, p: float, ignore: bool = False) -> Tensor:
     ----
         input: Input tensor
         p: Probability of dropout
-        train: If True, apply dropout; if False, return input
+        ignore: If True, return input without applying dropout; if False, apply dropout
 
     Returns:
     -------
@@ -204,8 +208,7 @@ def dropout(input: Tensor, p: float, ignore: bool = False) -> Tensor:
     """
     if ignore:
         return input
-    
-    random_tensor = rand(input.shape)
-    random_drop = random_tensor > p
-    return input * random_drop 
-
+    if not ignore: 
+        random = rand(input.shape) 
+        drop = random > p
+        return input * drop 
