@@ -42,7 +42,7 @@ The files that will be synced are:
 - **Maximum Epochs**: 250
 
 ### Training Log:
-- Ran up to **epoch 55**:
+Ran up to **epoch 55**
 
 Training log: [Click to View Sentiment Log](./sentiment.txt)
 
@@ -53,6 +53,6 @@ Training log: [Click to View Sentiment Log](./sentiment.txt)
 - **Maximum Epochs**: 500
 
 ### Training Log:
-- Ran up to **epoch 28**:
+Ran up to **epoch 28**
 
 Training log: [Click to View MNIST Log](./mnist.txt)
