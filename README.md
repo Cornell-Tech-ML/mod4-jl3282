@@ -47,7 +47,7 @@ Ran up to **epoch 55**
 Training log: [Click to View Sentiment Log](./sentiment.txt)
 
 ## Task 4.5: Digit classification (MNIST)
-- **Training Set Size**: 5000 
+- **Training Set Size**: 5000
 - **Validation Set Size**: 500
 - **Learning Rate**: 0.01
 - **Maximum Epochs**: 500

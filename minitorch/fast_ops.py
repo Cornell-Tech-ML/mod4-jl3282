@@ -171,7 +171,7 @@ def tensor_map(
     ) -> None:
         # TODO: Implement for Task 3.1.
         # When `out` and `in` are stride-aligned, avoid indexing
-        if(
+        if (
             len(out_strides) != len(in_strides)
             or (out_strides != in_strides).any()
             or (out_shape != in_shape).any()
@@ -188,9 +188,9 @@ def tensor_map(
             for i in prange(len(out)):
                 out[i] = fn(in_storage[i])
 
-
     return njit(_map, parallel=True)  # type: ignore
     # return njit(parallel=True)(_map)
+
 
 def tensor_zip(
     fn: Callable[[float, float], float],
@@ -251,7 +251,6 @@ def tensor_zip(
             for i in prange(len(out)):
                 out[i] = fn(a_storage[i], b_storage[i])
 
-
     return njit(_zip, parallel=True)  # type: ignore
     # return njit(parallel=True)(_zip)
 
@@ -302,6 +301,7 @@ def tensor_reduce(
 
     return njit(_reduce, parallel=True)  # type: ignore
     # return njit(parallel=True)(_reduce)
+
 
 def _tensor_matrix_multiply(
     out: Storage,
@@ -360,9 +360,10 @@ def _tensor_matrix_multiply(
                     acc += a_storage[a_inner] * b_storage[b_inner]
                     a_inner += a_strides[2]
                     b_inner += b_strides[1]
-                out_position = i1 * out_strides[0] + i2 * out_strides[1] + i3 * out_strides[2]
+                out_position = (
+                    i1 * out_strides[0] + i2 * out_strides[1] + i3 * out_strides[2]
+                )
                 out[out_position] = acc
-
 
 
 tensor_matrix_multiply = njit(_tensor_matrix_multiply, parallel=True)

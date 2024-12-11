@@ -35,17 +35,17 @@ def test_max(t: Tensor) -> None:
     for dim in range(3):
         reduced = minitorch.max(t, dim)
 
-        if dim == 0: # Reduce along the batch dimension
+        if dim == 0:  # Reduce along the batch dimension
             for channel in range(3):
                 for width in range(4):
                     expected = max(t[batch, channel, width] for batch in range(2))
                     assert_close(reduced[0, channel, width], expected)
-        elif dim == 1: # Reduce along the channel dimension
+        elif dim == 1:  # Reduce along the channel dimension
             for batch in range(2):
                 for width in range(4):
                     expected = max(t[batch, channel, width] for channel in range(3))
                     assert_close(reduced[batch, 0, width], expected)
-        elif dim == 2: # Reduce along the width dimension
+        elif dim == 2:  # Reduce along the width dimension
             for batch in range(2):
                 for channel in range(3):
                     expected = max(t[batch, channel, width] for width in range(4))
