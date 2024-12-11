@@ -43,10 +43,6 @@ The files that will be synced are:
 
 ### Training Log:
 - Ran up to **epoch 55**:
-  - **Loss**: 10.51
-  - **Train Accuracy**: 87.78%
-  - **Validation Accuracy**: 71.00%
-  - **Best Validation Accuracy**: 75.00%
 
 Training log: [Click to View Sentiment Log](./sentiment.txt)
 
@@ -57,9 +53,6 @@ Training log: [Click to View Sentiment Log](./sentiment.txt)
 - **Maximum Epochs**: 500
 
 ### Training Log:
-- Ran up to **epoch 500**:
-  - **Loss**: 
-  - **Train Accuracy**: 
-  - **Validation Accuracy**: 
-  - **Best Validation Accuracy**: 
+- Ran up to **epoch 28**:
+
 Training log: [Click to View MNIST Log](./mnist.txt)

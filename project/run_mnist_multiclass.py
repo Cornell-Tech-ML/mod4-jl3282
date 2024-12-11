@@ -77,16 +77,14 @@ class Network(minitorch.Module):
 
     def forward(self, x):
         # TODO: Implement for Task 4.5.
-        self.mid = self.layer1.forward(x).relu()
-        self.out = self.layer2.forward(self.mid).relu()
-        x = minitorch.avgpool2d(self.out, (4, 4))
-        x = x.view(BATCH, 392)
-        x = self.linear.forward(x).relu()
-        
-        if self.training:
-            x = minitorch.dropout(x, 0.25, True)
-        
-        return minitorch.logsoftmax(self.final.forward(x), 1)
+        self.mid = self.layer1(x).relu()
+        self.out = self.layer2(self.mid).relu()
+        pooling = minitorch.avgpool2d(self.out, (4, 4))
+        x = pooling.view(BATCH, 392)
+        x1 = self.linear(x).relu()
+        x1 = minitorch.dropout(x1, 0.25, not self.training)
+        x2 = self.final(x1)
+        return minitorch.logsoftmax(x2, 1)
 
 
 
